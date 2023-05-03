@@ -1,5 +1,3 @@
-
-
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -22,19 +20,23 @@
 
         <div id="messages"></div>
 
-        <?php if($this->session->flashdata('success')): ?>
-          <div class="alert alert-success alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <?php echo $this->session->flashdata('success'); ?>
-          </div>
-        <?php elseif($this->session->flashdata('error')): ?>
+        <?php if ($this->session->flashdata('success')): ?>
+          <!-- <div class="alert alert-success alert-dismissible" role="alert">
+                                                                                                                                                                                                                                                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                                                                                                                                                                                                                                                            aria-hidden="true">&times;</span></button>
+                                                                                                                                                                                                                                                                        <?php echo $this->session->flashdata('success'); ?>
+                                                                                                                                                                                                                                                                      </div> -->
+        <?php elseif ($this->session->flashdata('error')): ?>
           <div class="alert alert-error alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
             <?php echo $this->session->flashdata('error'); ?>
           </div>
         <?php endif; ?>
 
-        <?php if(in_array('createProduct', $user_permission)): ?>
+
+
+        <?php if (in_array('createProduct', $user_permission)): ?>
           <a href="<?php echo base_url('products/create') ?>" class="btn btn-primary">Add Product</a>
           <br /> <br />
         <?php endif; ?>
@@ -47,18 +49,18 @@
           <div class="box-body">
             <table id="manageTable" class="table table-bordered table-striped">
               <thead>
-              <tr>
-                <th>Image</th>
-                <th>SKU</th>
-                <th>Product Name</th>
-                <th>Price</th>
-                <th>Qty</th>
-                <th>Store</th>
-                <th>Availability</th>
-                <?php if(in_array('updateProduct', $user_permission) || in_array('deleteProduct', $user_permission)): ?>
-                  <th>Action</th>
-                <?php endif; ?>
-              </tr>
+                <tr>
+                  <!-- <th>Image</th> -->
+                  <th>SKU</th>
+                  <th>Product Name</th>
+                  <th>Price</th>
+                  <th>Qty</th>
+                  <!-- <th>Store</th> -->
+                  <th>Availability</th>
+                  <?php if (in_array('updateProduct', $user_permission) || in_array('deleteProduct', $user_permission)): ?>
+                    <th>Action</th>
+                  <?php endif; ?>
+                </tr>
               </thead>
 
             </table>
@@ -70,100 +72,214 @@
       <!-- col-md-12 -->
     </div>
     <!-- /.row -->
-    
+
 
   </section>
   <!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
 
-<?php if(in_array('deleteProduct', $user_permission)): ?>
-<!-- remove brand modal -->
-<div class="modal fade" tabindex="-1" role="dialog" id="removeModal">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Remove Product</h4>
-      </div>
-
-      <form role="form" action="<?php echo base_url('products/remove') ?>" method="post" id="removeForm">
-        <div class="modal-body">
-          <p>Do you really want to remove?</p>
+<?php if (in_array('deleteProduct', $user_permission)): ?>
+  <!-- remove brand modal -->
+  <div class="modal fade" tabindex="-1" role="dialog" id="removeModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Remove Product</h4>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Save changes</button>
-        </div>
-      </form>
+
+        <form role="form" action="<?php echo base_url('products/remove') ?>" method="post" id="removeForm">
+          <div class="modal-body">
+            <p>Do you really want to remove?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
 
 
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
 <?php endif; ?>
 
 
+<!--Edit  Product Quantity modal -->
+<div class="modal fade" id="editModal" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Edit Product Quantity</h4>
+      </div>
+
+      <form role="form" action="<?php echo base_url('products/updateQuantity') ?>" method="post" id="editQuantityForm">
+        <!-- <form role="form" method="post" id="editQuantityForm"> -->
+        <div class="modal-body">
+
+          <div class="form-group">
+            <label for="active">Update Quantity</label>
+            <input type="number" class="form-control" id="product_quantity" name="product_quantity"
+              placeholder="Enter Quantity" autocomplete="off" required />
+          </div>
+
+          <div class="form-group">
+            <label for="active">Price Product</label>
+            <input type="number" class="form-control" id="product_price" name="product_price"
+              placeholder="Product Price" autocomplete="off" required />
+          </div>
+          <div class="form-group">
+
+            <input type="hidden" class="form-control" id="product_id" name="product_id" />
+          </div>
+          <div class="form-group">
+            <input type="hidden" class="form-control" id="product_qty" name="product_qty" />
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="open">Update</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <script type="text/javascript">
-var manageTable;
-var base_url = "<?php echo base_url(); ?>";
+  var manageTable;
+  var base_url = "<?php echo base_url(); ?>";
 
-$(document).ready(function() {
+  $(document).ready(function () {
 
-  $("#mainProductNav").addClass('active');
+    $("#mainProductNav").addClass('active');
 
-  // initialize the datatable 
-  manageTable = $('#manageTable').DataTable({
-    'ajax': base_url + 'products/fetchProductData',
-    'order': []
+    // initialize the datatable 
+    manageTable = $('#manageTable').DataTable({
+      'ajax': base_url + 'products/fetchProductData',
+      'order': []
+    });
+
   });
 
-});
+  // remove functions 
+  function removeFunc(id) {
+    if (id) {
+      $("#removeForm").on('submit', function () {
 
-// remove functions 
-function removeFunc(id)
-{
-  if(id) {
-    $("#removeForm").on('submit', function() {
+        var form = $(this);
+
+        // remove the text-danger
+        $(".text-danger").remove();
+
+        $.ajax({
+          url: form.attr('action'),
+          type: form.attr('method'),
+          data: { product_id: id },
+          dataType: 'json',
+          success: function (response) {
+
+            manageTable.ajax.reload(null, false);
+
+            if (response.success === true) {
+              $("#messages").html('<div class="alert alert-success alert-dismissible" role="alert">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                '<strong> <span class="glyphicon glyphicon-ok-sign"></span> </strong>' + response.messages +
+                '</div>');
+
+              // hide the modal
+              $("#removeModal").modal('hide');
+            } else {
+              $("#messages").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
+                '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                '<strong> <span class="glyphicon glyphicon-exclamation-sign"></span> </strong>' + response.messages +
+                '</div>');
+            }
+          }
+        });
+
+        return false;
+      });
+    }
+  }
+
+  $(document).ready(function () {
+    // Show the success modal
+    $('#successModal').modal('show');
+
+    // Close the success modal after 5 seconds
+    setTimeout(function () {
+      $('#successModal').modal('hide');
+    }, 5000);
+  });
+
+  function openModal(id, quantity) {
+    $("#editModal").modal();
+
+    $("#editQuantityForm").on('submit', function () {
 
       var form = $(this);
-
-      // remove the text-danger
-      $(".text-danger").remove();
+      $("#product_id").val(id);
+      var new_qty = Number($("#product_quantity").val()) + Number(quantity);
+      var new_price = $('#product_price').val();
+      $("#product_qty").val(new_qty);
 
       $.ajax({
-        url: form.attr('action'),
-        type: form.attr('method'),
-        data: { product_id:id }, 
+        url: base_url + 'products/checkUpdateQuantity',
+        type: "POST",
+        data: { product_id: id },
         dataType: 'json',
-        success:function(response) {
-
-          manageTable.ajax.reload(null, false); 
-
-          if(response.success === true) {
-            $("#messages").html('<div class="alert alert-success alert-dismissible" role="alert">'+
-              '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+
-              '<strong> <span class="glyphicon glyphicon-ok-sign"></span> </strong>'+response.messages+
-            '</div>');
-
-            // hide the modal
-            $("#removeModal").modal('hide');
-
-          } else {
-
-            $("#messages").html('<div class="alert alert-warning alert-dismissible" role="alert">'+
-              '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+
-              '<strong> <span class="glyphicon glyphicon-exclamation-sign"></span> </strong>'+response.messages+
-            '</div>'); 
+        success: function (response) {
+          console.log("Response:", response)
+          let isValidProductQuantity = true;
+          if (response && response?.length > 0) {
+            response.map(res => {
+              if (Number(res.quantity) * new_qty > Number(res.attribute_quantity)) {
+                isValidProductQuantity = false;
+                return
+              }
+            })
           }
+          if (!isValidProductQuantity) {
+            alert("Too Much Product Quantity!!")
+          } else {
+            $.ajax({
+              url: form.attr('action'),
+              type: form.attr('method'),
+              data: { product_id: id, product_qty: new_qty, product_price: new_price },
+              dataType: 'json',
+              success: function (response) {
+                manageTable.ajax.reload(null, false);
+                if (response.success === true) {
+                  $("#messages").html('<div class="alert alert-success alert-dismissible" role="alert">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                    '<strong> <span class="glyphicon glyphicon-ok-sign"></span> </strong>' + response.messages +
+                    '</div>');
+
+                  // hide the modal
+                  $("#editModal").modal('hide');
+                  location.reload();
+                } else {
+                  $("#messages").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
+                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                    '<strong> <span class="glyphicon glyphicon-exclamation-sign"></span> </strong>' + response.messages +
+                    '</div>');
+                }
+              }
+            });
+          }
+
         }
-      }); 
+      })
+
+
 
       return false;
     });
   }
-}
-
 
 </script>

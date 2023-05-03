@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class Model_attributes extends CI_Model
 {
@@ -18,20 +18,23 @@ class Model_attributes extends CI_Model
 	/* get the attribute data */
 	public function getAttributeData($id = null)
 	{
-		if($id) {
-			$sql = "SELECT * FROM attributes where id = ?";
+		if ($id) {
+			// $sql = "SELECT * FROM attributes where id = ?";
+			$sql = "SELECT c.name as category_name ,a.* FROM attributes a INNER JOIN categories c ON c.id = a.category_id WHERE a.id = ?";
 			$query = $this->db->query($sql, array($id));
 			return $query->row_array();
 		}
 
-		$sql = "SELECT * FROM attributes";
+		// $sql = "SELECT * FROM attributes";
+		$sql = "SELECT c.name as category_name ,a.* FROM attributes a INNER JOIN categories c ON c.id = a.category_id";
+
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
 
 	public function countAttributeValue($id = null)
 	{
-		if($id) {
+		if ($id) {
 			$sql = "SELECT * FROM attribute_value WHERE attribute_parent_id = ?";
 			$query = $this->db->query($sql, array($id));
 			return $query->num_rows();
@@ -56,7 +59,7 @@ class Model_attributes extends CI_Model
 
 	public function create($data)
 	{
-		if($data) {
+		if ($data) {
 			$insert = $this->db->insert('attributes', $data);
 			return ($insert == true) ? true : false;
 		}
@@ -64,7 +67,7 @@ class Model_attributes extends CI_Model
 
 	public function update($data, $id)
 	{
-		if($data && $id) {
+		if ($data && $id) {
 			$this->db->where('id', $id);
 			$update = $this->db->update('attributes', $data);
 			return ($update == true) ? true : false;
@@ -73,7 +76,7 @@ class Model_attributes extends CI_Model
 
 	public function remove($id)
 	{
-		if($id) {
+		if ($id) {
 			$this->db->where('id', $id);
 			$delete = $this->db->delete('attributes');
 			return ($delete == true) ? true : false;
@@ -82,7 +85,7 @@ class Model_attributes extends CI_Model
 
 	public function createValue($data)
 	{
-		if($data) {
+		if ($data) {
 			$insert = $this->db->insert('attribute_value', $data);
 			return ($insert == true) ? true : false;
 		}
@@ -90,7 +93,7 @@ class Model_attributes extends CI_Model
 
 	public function updateValue($data, $id)
 	{
-		if($data && $id) {
+		if ($data && $id) {
 			$this->db->where('id', $id);
 			$update = $this->db->update('attribute_value', $data);
 			return ($update == true) ? true : false;
@@ -99,11 +102,25 @@ class Model_attributes extends CI_Model
 
 	public function removeValue($id)
 	{
-		if($id) {
+		if ($id) {
 			$this->db->where('id', $id);
 			$delete = $this->db->delete('attribute_value');
 			return ($delete == true) ? true : false;
 		}
+	}
+
+	public function getItemDataByCategory($id = null)
+	{
+		if ($id) {
+			$sql = "SELECT * FROM attributes WHERE category_id = ?";
+			$query = $this->db->query($sql, array($id));
+			return $query->result_array();
+
+		}
+
+		$sql = "SELECT * FROM attributes";
+		$query = $this->db->query($sql);
+		return $query->result_array();
 	}
 
 }

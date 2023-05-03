@@ -4,6 +4,8 @@
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
   <section class="content-header">
+
+
     <h1>
       Manage
       <small>Orders</small>
@@ -22,7 +24,7 @@
 
         <div id="messages"></div>
 
-        <?php if($this->session->flashdata('success')): ?>
+        <!-- <?php if($this->session->flashdata('success')): ?>
           <div class="alert alert-success alert-dismissible" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <?php echo $this->session->flashdata('success'); ?>
@@ -32,7 +34,7 @@
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <?php echo $this->session->flashdata('error'); ?>
           </div>
-        <?php endif; ?>
+        <?php endif; ?> -->
 
 
         <div class="box">
@@ -45,19 +47,19 @@
 
                 <?php echo validation_errors(); ?>
 
-                <div class="form-group">
-                  <label for="gross_amount" class="col-sm-12 control-label">Date: <?php echo date('Y-m-d') ?></label>
+                <div style="display: flex;">
+                  <label style="font-size:15px;" for="gross_amount"  class="col-sm-12 control-label">Order Date:</label>
+                  <input 
+                  style=" padding: 2px 5px;border-radius: 6px;" type="datetime-local" id="order_date" name="orderdatetime" required/>
                 </div>
-                <div class="form-group">
-                  <label for="gross_amount" class="col-sm-12 control-label">Date: <?php echo date('h:i a') ?></label>
-                </div>
+            
 
                 <div class="col-md-4 col-xs-12 pull pull-left">
 
                   <div class="form-group">
                     <label for="gross_amount" class="col-sm-5 control-label" style="text-align:left;">Customer Name</label>
                     <div class="col-sm-7">
-                      <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Enter Customer Name"  autocomplete="off" />
+                      <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Enter Customer Name"  autocomplete="off" required/>
                     </div>
                   </div>
 
@@ -101,11 +103,11 @@
                         </td>
                         <td><input type="text" name="qty[]" id="qty_1" class="form-control" required onkeyup="getTotal(1)"></td>
                         <td>
-                          <input type="text" name="rate[]" id="rate_1" class="form-control"  autocomplete="off">
+                          <input type="number" name="rate[]" id="rate_1" class="form-control" disabled  autocomplete="off">
                           <input type="hidden" name="rate_value[]" id="rate_value_1" class="form-control" autocomplete="off">
                         </td>
                         <td>
-                          <input type="text" name="amount[]" id="amount_1" class="form-control"  autocomplete="off">
+                          <input type="number" name="amount[]" id="amount_1" class="form-control"disabled  autocomplete="off">
                           <input type="hidden" name="amount_value[]" id="amount_value_1" class="form-control" autocomplete="off">
                         </td>
                         <td><button type="button" class="btn btn-default" onclick="removeRow('1')"><i class="fa fa-close"></i></button></td>
@@ -120,7 +122,7 @@
                   <div class="form-group">
                     <label for="gross_amount" class="col-sm-5 control-label">Gross Amount</label>
                     <div class="col-sm-7">
-                      <input type="text" class="form-control" id="gross_amount" name="gross_amount"  autocomplete="off">
+                      <input type="text" class="form-control" id="gross_amount" name="gross_amount" disabled  autocomplete="off">
                       <input type="hidden" class="form-control" id="gross_amount_value" name="gross_amount_value" autocomplete="off">
                     </div>
                   </div>
@@ -151,7 +153,7 @@
                   <div class="form-group">
                     <label for="net_amount" class="col-sm-5 control-label">Net Amount</label>
                     <div class="col-sm-7">
-                      <input type="text" class="form-control" id="net_amount" name="net_amount"  autocomplete="off">
+                      <input type="text" class="form-control" id="net_amount" name="net_amount" disabled  autocomplete="off">
                       <input type="hidden" class="form-control" id="net_amount_value" name="net_amount_value" autocomplete="off">
                     </div>
                   </div>
@@ -186,6 +188,8 @@
 <!-- /.content-wrapper -->
 
 <script type="text/javascript">
+
+  var products = [];
   var base_url = "<?php echo base_url(); ?>";
 
   $(document).ready(function() {
@@ -202,6 +206,7 @@
   
     // Add new row in the table 
     $("#add_row").unbind('click').bind('click', function() {
+      alert("HERE");
       var table = $("#product_info_table");
       var count_table_tbody_tr = $("#product_info_table tbody tr").length;
       var row_id = count_table_tbody_tr + 1;
@@ -223,9 +228,9 @@
                         
                       html += '</select>'+
                     '</td>'+ 
-                    '<td><input type="number" name="qty[]" id="qty_'+row_id+'" class="form-control" onkeyup="getTotal('+row_id+')"></td>'+
-                    '<td><input type="text" name="rate[]" id="rate_'+row_id+'" class="form-control" ><input type="hidden" name="rate_value[]" id="rate_value_'+row_id+'" class="form-control"></td>'+
-                    '<td><input type="text" name="amount[]" id="amount_'+row_id+'" class="form-control" ><input type="hidden" name="amount_value[]" id="amount_value_'+row_id+'" class="form-control"></td>'+
+                    '<td><input type="number"  name="qty[]" id="qty_'+row_id+'" class="form-control" onkeyup="getTotal('+row_id+')"></td>'+
+                    '<td><input type="text" disabled name="rate[]" id="rate_'+row_id+'" class="form-control" ><input type="hidden" name="rate_value[]" id="rate_value_'+row_id+'" class="form-control"></td>'+
+                    '<td><input type="text" disabled name="amount[]" id="amount_'+row_id+'" class="form-control" ><input type="hidden" name="amount_value[]" id="amount_value_'+row_id+'" class="form-control"></td>'+
                     '<td><button type="button" class="btn btn-default" onclick="removeRow(\''+row_id+'\')"><i class="fa fa-close"></i></button></td>'+
                     '</tr>';
 
@@ -237,7 +242,7 @@
               }
 
               $(".product").select2();
-
+              
           }
         });
 
@@ -247,13 +252,39 @@
   }); // /document
 
   function getTotal(row = null) {
+    var isValid = true;
     if(row) {
-      var total = Number($("#rate_value_"+row).val()) * Number($("#qty_"+row).val());
-      total = total.toFixed(2);
-      $("#amount_"+row).val(total);
-      $("#amount_value_"+row).val(total);
+      for(let i = 0; i < products.length; i++){
+        if (products[i].rowNumber == row)
+        {
+          var input_qty = Number($("#qty_"+row).val());
+          var max_qty = products[i].qty;
+          console.log("input qunatity", input_qty);
+          console.log("max quantity", max_qty);
+          if (input_qty > max_qty){
+     document.getElementById("net_amount").value = "";
+     document.getElementById("gross_amount").value = "";
+     document.getElementById("amount_1").value = "";
+     document.getElementById("rate_1").value = "";
+     document.getElementById("qty_1").value = "";
+               
+            alert("QUANTITY EXCEEDS");
+            isValid = false;
+            
+          } 
+
+        
+        }
+      }
+      if (isValid){
+        var total = Number($("#rate_value_"+row).val()) * Number($("#qty_"+row).val());
+        total = total.toFixed(2);
+        $("#amount_"+row).val(total);
+        $("#amount_value_"+row).val(total);
+
+        subAmount();
+      }
       
-      subAmount();
 
     } else {
       alert('no row !! please refresh the page');
@@ -263,6 +294,7 @@
   // get the product information from the server
   function getProductData(row_id)
   {
+    
     var product_id = $("#product_"+row_id).val();    
     if(product_id == "") {
       $("#rate_"+row_id).val("");
@@ -293,6 +325,11 @@
           $("#amount_"+row_id).val(total);
           $("#amount_value_"+row_id).val(total);
           
+          var obj = {
+            rowNumber : row_id,
+            qty : response.qty,
+          }
+          products.push(obj);
           subAmount();
         } // /success
       }); // /ajax function to fetch the product data 
@@ -357,4 +394,11 @@
     $("#product_info_table tbody tr#row_"+tr_id).remove();
     subAmount();
   }
+
+  $('#order_date')
+    .on('changeDate show', function(e) {
+        // Revalidate the date when user change it
+        $('.form-horizontal').bootstrapValidator('revalidateField', 'endDate');
+});
+
 </script>

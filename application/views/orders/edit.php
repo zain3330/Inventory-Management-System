@@ -22,7 +22,7 @@
 
         <div id="messages"></div>
 
-        <?php if($this->session->flashdata('success')): ?>
+        <!-- <?php if($this->session->flashdata('success')): ?>
           <div class="alert alert-success alert-dismissible" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <?php echo $this->session->flashdata('success'); ?>
@@ -32,7 +32,7 @@
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <?php echo $this->session->flashdata('error'); ?>
           </div>
-        <?php endif; ?>
+        <?php endif; ?> -->
 
 
         <div class="box">
@@ -46,11 +46,14 @@
                 <?php echo validation_errors(); ?>
 
                 <div class="form-group">
-                  <label for="date" class="col-sm-12 control-label">Date: <?php echo date('Y-m-d') ?></label>
+                  <label for="date" class="col-sm-12 control-label">Date: 
+                    <?php 
+                     $date =  DateTime::createFromFormat('U', $order_data['order']['date_time']);
+                     echo $date->format('d-m-Y h:i a'); ?></label>
                 </div>
-                <div class="form-group">
-                  <label for="time" class="col-sm-12 control-label">Date: <?php echo date('h:i a') ?></label>
-                </div>
+                <!-- <div class="form-group">
+                  <label for="time" class="col-sm-12 control-label">Time: <?php echo date('h:i a') ?></label>
+                </div> -->
 
                 <div class="col-md-4 col-xs-12 pull pull-left">
 
@@ -178,7 +181,7 @@
               </div>
               <!-- /.box-body -->
 
-              <div class="box-footer">
+              <!-- <div class="box-footer">
 
                 <input type="hidden" name="service_charge_rate" value="<?php echo $company_data['service_charge_value'] ?>" autocomplete="off">
                 <input type="hidden" name="vat_charge_rate" value="<?php echo $company_data['vat_charge_value'] ?>" autocomplete="off">
@@ -186,7 +189,24 @@
                 <a target="__blank" href="<?php echo base_url() . 'orders/printDiv/'.$order_data['order']['id'] ?>" class="btn btn-default" >Print</a>
                 <button type="submit" class="btn btn-primary">Save Changes</button>
                 <a href="<?php echo base_url('orders/') ?>" class="btn btn-warning">Back</a>
-              </div>
+              </div> -->
+
+              <div class="box-footer">
+    <?php if(!is_null($company_data) && isset($company_data['service_charge_value'])): ?>
+        <input type="hidden" name="service_charge_rate" value="<?php echo $company_data['service_charge_value'] ?>" autocomplete="off">
+    <?php endif; ?>
+
+    <?php if(!is_null($company_data) && isset($company_data['vat_charge_value'])): ?>
+        <input type="hidden" name="vat_charge_rate" value="<?php echo $company_data['vat_charge_value'] ?>" autocomplete="off">
+    <?php endif; ?>
+
+    <?php if(isset($order_data['order']['id'])): ?>
+        <a target="__blank" href="<?php echo base_url() . 'orders/printDiv/'.$order_data['order']['id'] ?>" class="btn btn-default" >Print</a>
+    <?php endif; ?>
+    
+    <button  type="submit" class="btn btn-primary" >Save Changes</button>
+    <a href="<?php echo base_url('orders/') ?>" class="btn btn-warning">Back</a>
+</div>
             </form>
           <!-- /.box-body -->
         </div>
@@ -413,4 +433,5 @@
     $("#product_info_table tbody tr#row_"+tr_id).remove();
     subAmount();
   }
+
 </script>
